@@ -1,0 +1,47 @@
+---
+title: "Tableau Dashboard"
+output: html_notebook
+---
+
+### Visualizing Sales Data
+
+#### Importing packages and data
+
+We start by importing the necessary package for data manipulation and we read the data in CSV file.
+
+```{r}
+library(dplyr)
+library(lubridate)
+sales_data <- read.csv("sales_data.csv")
+```
+
+#### Data processing
+
+We use the imported dplyr package to manipulate the data and create new variables for the dashboard.
+
+```{r}
+sales_data <- sales_data %>%
+  mutate(sale_month = format(ymd(sale_date), "%Y-%m"), 
+         product_group = case_when(
+           product %in% c("a", "b", "c") ~ "Group A", 
+           product %in% c("d", "e", "f") ~ "Group B", 
+           product %in% c("g", "h", "i", "j") ~ "Group C"
+         ))
+```
+
+#### Exporting data
+
+Now we export processed data as a CSV file for visualizations.
+
+```{r}
+write.csv(sales_data, "sales_data_cleaned.csv", row.names = FALSE)
+```
+
+#### Tableau
+We import and connect our cleaned CSV file into tableau public, we create a new worksheet and add the "Sale Month" and "Sales Amount" variables to a line chart and use the "Product Group" variable as a color legend.
+
+We Create a new worksheet and add the "Product Group" and "Sales Amount" variables to a bar chart. Using the "Customer ID" variable as a filter to show only the sales data for a specific customer and then we create a new worksheet and add the "Product" and "Sales Amount" variables to a heat map also using the "Sale Month" variable as a column and the "Product Group" variable as a row.
+
+After the above process then we can finally create a new dashboard and add the three worksheets to it. We also add a filter for the "Sale Month" variable to allow the user to select a specific month.
+
+"Tableau Dashboard" https://public.tableau.com/views/SalesPerformanceDashboard_16829813109670/SalesPerformanceDashboard?:language=en-US&:display_count=n&:origin=viz_share_link
